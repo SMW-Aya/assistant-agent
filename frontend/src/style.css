@@ -1,0 +1,80 @@
+:root {
+  font-family: "IBM Plex Sans", "PingFang SC", sans-serif;
+  color: #152238;
+  background: radial-gradient(circle at 10% 20%, #edf4ff, #f8f5ef 45%, #f4f9f7 100%);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 24px;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid #d9e2f2;
+  border-radius: 16px;
+  padding: 16px;
+  backdrop-filter: blur(6px);
+}
+
+h2 { margin-top: 0; }
+input, textarea, button {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #b9c8e3;
+  padding: 10px;
+  font: inherit;
+  margin-bottom: 10px;
+}
+
+button {
+  background: linear-gradient(120deg, #0f62fe, #1f9d8f);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.messages {
+  min-height: 420px;
+  max-height: 60vh;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid #e3eaf5;
+  border-radius: 12px;
+  background: #fbfdff;
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.message.user {
+  background: #e6f1ff;
+}
+
+.message.assistant {
+  background: #eefaf3;
+}
+
+.doc-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.doc-list li {
+  margin-bottom: 6px;
+}
+
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+}
