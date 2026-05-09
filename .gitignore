@@ -1,0 +1,15 @@
+# Local secrets
+backend/src/main/resources/application-local.yml
+
+# Maven local cache in project
+backend/.m2/
+
+# Build outputs
+backend/target/
+frontend/node_modules/
+frontend/dist/
+
+# IDE
+.idea/
+.vscode/
+.DS_Store
