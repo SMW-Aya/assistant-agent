@@ -1,17 +1,19 @@
 # Course Assistant Agent
 
-A production-oriented starter for a course assistant agent system based on:
-- Spring Boot + Spring AI + MySQL + Redis + Vector Retrieval abstraction
-- Vue 3 + Vite frontend
+Course assistant agent project aligned with the SpringAI tutorial style:
+- `ChatClient + Advisor` orchestration
+- `RAG (VectorStore + QuestionAnswerAdvisor)`
+- file-based conversation memory
+- full-stack: Spring Boot + MySQL + Redis + Vue
 
 ## Structure
 - `backend`: Spring Boot API service
 - `frontend`: Vue web app
-- `docs`: architecture and design docs
+- `docs`: architecture and API notes
 
 ## Quick Start
 
-### 1) Start infra (MySQL + Redis)
+### 1) Start infra
 ```bash
 docker compose up -d mysql redis
 ```
@@ -19,7 +21,7 @@ docker compose up -d mysql redis
 ### 2) Run backend
 ```bash
 cd backend
-./mvnw spring-boot:run
+mvn spring-boot:run
 ```
 
 ### 3) Run frontend
@@ -29,6 +31,14 @@ npm install
 npm run dev
 ```
 
-## Notes
-- Current vector retrieval uses an in-memory implementation for local run.
-- You can switch to pgvector/Milvus by implementing `VectorStoreService`.
+## What Was Migrated From yu-ai-agent Style
+- `CourseAssistantApp`: app-level AI capability encapsulation
+- `MyLoggerAdvisor`: prompt/response logging
+- `FileBasedChatMemory`: local persistent memory per session
+- `CourseDocumentLoader + CourseVectorStoreConfig`: markdown + DB document loading and vectorization
+- `QuestionAnswerAdvisor`: RAG answer generation path
+
+## Next Upgrade Suggestions
+- Replace `SimpleVectorStore` with `pgvector` for persistence and recall quality
+- Add JWT + RBAC
+- Add PDF/DOCX parser pipeline

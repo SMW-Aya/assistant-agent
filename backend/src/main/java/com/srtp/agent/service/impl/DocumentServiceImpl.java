@@ -4,19 +4,21 @@ import com.srtp.agent.dto.DocumentCreateRequest;
 import com.srtp.agent.entity.CourseDocument;
 import com.srtp.agent.repository.CourseDocumentRepository;
 import com.srtp.agent.service.DocumentService;
-import com.srtp.agent.service.VectorStoreService;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
     private final CourseDocumentRepository repository;
-    private final VectorStoreService vectorStoreService;
+    private final VectorStore courseVectorStore;
 
-    public DocumentServiceImpl(CourseDocumentRepository repository, VectorStoreService vectorStoreService) {
+    public DocumentServiceImpl(CourseDocumentRepository repository, VectorStore courseVectorStore) {
         this.repository = repository;
-        this.vectorStoreService = vectorStoreService;
+        this.courseVectorStore = courseVectorStore;
     }
 
     @Override
@@ -26,7 +28,12 @@ public class DocumentServiceImpl implements DocumentService {
         doc.setSource(request.getSource());
         doc.setContent(request.getContent());
         CourseDocument saved = repository.save(doc);
-        vectorStoreService.upsert(saved.getId(), saved.getTitle(), saved.getContent());
+
+        courseVectorStore.add(List.of(new Document(saved.getContent(), Map.of(
+                "title", saved.getTitle(),
+                "source", saved.getSource(),
+                "docId", String.valueOf(saved.getId())
+        ))));
         return saved;
     }
 
