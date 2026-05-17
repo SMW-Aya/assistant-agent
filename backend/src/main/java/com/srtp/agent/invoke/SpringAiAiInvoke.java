@@ -7,7 +7,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component     只是用来测试ai大模型连通性的，如果想测试连通信可以删除注释
 public class SpringAiAiInvoke implements CommandLineRunner {
 
     @Resource
@@ -15,7 +15,7 @@ public class SpringAiAiInvoke implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        AssistantMessage output = dashscopeChatModel.call(new Prompt("你好，我是射命丸文，测试一下连接"))
+        AssistantMessage output = dashscopeChatModel.call(new Prompt("你好，我是老江，测试一下连接"))
                 .getResult()
                 .getOutput();
         System.out.println(output.getText());
