@@ -16,6 +16,7 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +26,14 @@ public class AssistantApp {
 
     private static final String SYSTEM_PROMPT = "你是专业Java助教。你的唯一任务是解决用户的Java编程问题。请严格执行：1.先确认学生的具体报错或环境；2.通过引导提问引导学生思考，不直接给答案；3.回答末尾必须有2个技术深度追问。保持专业Office Hour风格";
     private static final String CHAT_MEMORY_CONVERSATION_ID_KEY = "chat_memory_conversation_id";
+    private static final String CHAT_MEMORY_RETRIEVE_SIZE_KEY = "chat_memory_retrieve_size";
 
     private final ChatClient chatClient;
 
     @Resource
     private VectorStore loveAppVectorStore;
+    @Resource
+    private ToolCallback[] allTools;
 
     @Autowired
     public AssistantApp(ChatModel dashscopeChatModel,
@@ -94,6 +98,21 @@ public class AssistantApp {
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();
+        log.info("content: {}", content);
+        return content;
+    }
+
+    public String doChatWithTools(String message, String chatId) {
+        ChatResponse response = chatClient
+                .prompt()
+                .user(message)
+                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
+                .advisors(new MyLoggerAdvisor())
+                .toolCallbacks(allTools)
+                .call()
+                .chatResponse();
+        String content = response.getResult().getOutput().getText();
         log.info("content: {}", content);
         return content;
     }
